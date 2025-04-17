@@ -1,31 +1,21 @@
 from PIL import Image
 
-# red = Image.open('monro_red.jpg')
-# green = Image.open('monro_green.jpg')
-# blue = Image.open('monro_blue.jpg')
-
 image = Image.open('monro.jpg')
 red, green, blue = image.split()
+scale = 50
 
-# red.save('monro_red.jpg')
-# green.save('monro_green.jpg')
-# blue.save('monro_blue.jpg')
+red_croped_1 = red.crop((scale, 0, red.width, red.height))
+red_croped_2 = red.crop((scale / 2, 0, red.width - scale / 2, red.height))
+red_chanel = Image.blend(red_croped_1, red_croped_2, 0.5)
 
-scale = 100
+blue_croped_1 = blue.crop((0, 0, blue.width - scale, blue.height))
+blue_croped_2 = blue.crop((scale / 2, 0, blue.width - scale / 2, blue.height))
+blue_chanel = Image.blend(blue_croped_1, blue_croped_2, 0.5)
 
-red_croped = red.crop((scale, 0, red.width, red.height))
-blue_croped = blue.crop((scale / 2, 0, blue.width - scale / 2, blue.height))
+green_chanel = green.crop((scale / 2, 0, green.width - scale / 2,
+                           green.height))
 
-# red_croped.save('monro_red_croped.jpg')
-# blue_croped.save('monro_blue_croped.jpg')
-
-# red_croped = Image.open('monro_red_croped.jpg')
-# blue_croped = Image.open('monro_blue_croped.jpg')
-
-image = Image.blend(red_croped, blue_croped, 0.3)
-
-image.save('monro_mixed.jpg')
-
-# print(image.width)
-# print(image.height)
-# print(image.mode)
+final_image = Image.merge('RGB', (red_chanel, green_chanel, blue_chanel))
+final_image.save('monro_final.jpg')
+final_image.thumbnail((80, 80))
+final_image.save('monro_avatar.jpg')
